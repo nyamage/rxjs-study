@@ -19,40 +19,37 @@
 
 https://codepen.io/anon/pen/VBzKWq
 
+--- Know rxjs ----
+
 # RXJSの概要
+## What's Reactive Extension and RXJS?
+## Whrere does RXJS come from?
+## Benefit of RXJS
+## Who use RXJS
+## How is RXJS used in Angular
+## What function does RXJ provide?  
 
-- Reactive Extensionの簡単な紹介
-    - Reactive Extension is 何?
-    - どこからきたの
-    - メリット
-    - どんなフレームワークで使われてるの
-- Angular内でRXJSがどう使われているのか
-    - どこで使われるのか
-- RXJSが提供する機能
-    - Observable, utility function for observable
-  
-# Observble使用例
-- ObservableからObservableを作っていくのがわかる例
-- httpの例
+# Sample code of RXJS
+## Sample code for comparision with setInterval
+## Sample to create observable from source observable
+## Sample to join observable with another observable
 
-# Observbleのもう少し深い説明
-- ストリーム
-- 非同期・多値, function, iterator, promiseとの比較
-- marble diagram
+# What's Observble
+## observable represents stream
+## comparision with promise and function, iterator
+## marble diagram to describe stream
 
-# Observableを使う上で必要となる知識
+http://rxmarbles.com/
 
+--- Use rxjs ----
+
+# Tips for Observable
+
+## Concept used in RXJS
+## Observable Creation
 ## Operator
-- 代表的なOperatorの例
-
-## Error Handling
-- catch, catchError, retry, retryWhen
-  
 ## Hot vs Cold Observables
-- Hot observableの例
-- Cold observableの例
-- ハマるケース
-  
+## Error Handling
 ## How to Debug
 - Rxjsを使ってる場合のDebug手段として何があるか?
 

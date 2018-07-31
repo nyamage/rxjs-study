@@ -55,15 +55,119 @@ const posts$ = post$.mergeMap(post => getPostInfo$).subscribe(res => console.log
 
 ## Hot vs Cold Observables
 
+### Cold observable
+
+- cold observableはまだ呼ばれてない(subscribeされてない)関数
+- 呼び出すたびにObservableの処理が(再)実行される
+
+### Hot observable
+
+- Hot obserbaleはsubjectによってsubscribeされているcold observableのこと
+- subjectは幾つでもobsererを持つことができるが、オリジナルのobserverはsubject １つだけ
+
 https://github.com/ichpuchtli/awesome-rxjs#hot-vs-cold-observables
+
+
+### Example of Cold observable and Hot ovservable
+
+```javascript
+// COLD
+const source = new Observable((observer) => {
+  const socket = new WebSocket('ws://someurl');
+  socket.addEventListener('message', (e) => observer.next(e));
+  return () => socket.close();
+});
+```
+
+```javascript
+// HOT
+const socket = new WebSocket('ws://someurl');
+const source = new Observable((observer) => {
+  socket.addEventListener('message', (e) => observer.next(e));
+});
+```
+
+### Make cold observable hot
+
+#### With subject
+
+- 下記のsample codeはunsubscribeの問題があるが、cold observableと実際にsubscribeするobserverの間にsubjectを挟むことで、cold observableをhot observableを作れる
+```javascript
+function makeHot(coldObservable) {
+  const subject = new Subject();
+  coldObservable.subscribe(subject);
+  return new Observable((observer) => subject.subscribe(observer));
+}
+```
+
+#### With share method
+
+```javascript
+const hotSource = new Observable((observer) => {
+  const socket = new WebSocket('ws://someurl');
+  socket.addEventListener('message', (e) => observer.next(e));
+  return () => socket.close();
+}).share();
+```
+
 https://medium.com/@benlesh/hot-vs-cold-observables-f8094ed53339
 
-## Subject
+
+## Observer, Observable and Subject [TODO]
+
+### Observable
+
+- 引数がObserverで戻り値が関数な関数
+> Observable is just a function that takes an observer and returns a function
+
+Observerは以下のメソッドを持つオブジェクト
+- next
+- error
+- complete
+
+戻り値の関数はsubscribeした処理をキャンセルするための関数
+
+https://medium.com/@benlesh/learning-observable-by-building-observable-d5da57405d87
+
+### Subject
 
 Subject can act as a bridge/proxy between the source Observable and many observers, making it possible for multiple observers to share the same Observable execution.
 
 https://netbasal.com/understanding-subjects-in-rxjs-55102a190f3
 
+
+An RxJS Subject is a special type of Observable that allows values to be multicasted to many Observers. While plain Observables are unicast (each subscribed Observer owns an independent execution of the Observable), Subjects are multicast.
+
+* [TODO] multicast, unicast, hot ovservable, cold ovservable
+
+A Subject is like an Observable, but can multicast to many Observers. 
+Subjects are like EventEmitters: they maintain a registry of many listeners.
+
+http://reactivex.io/rxjs/manual/overview.html#subject
+
+
+
+https://medium.com/@benlesh/on-the-subject-of-subjects-in-rxjs-2b08b7198b93
+
+
+### Operator
+
+```javascript
+function map(source, project) {
+  return new Observable((observer) => {
+    const mapObserver = {
+      next: (x) => observer.next(project(x)),
+      error: (err) => observer.error(err),
+      complete: () => observer.complete()
+    };
+    return source.subscribe(mapObserver);
+  });
+}
+```
+
+> The most important thing to notice about what this operator is doing: When you subscribe to its returned observable, it’s creating a `mapObserver` to do the work and chaining `observer` and `mapObserver` together. Building operator chains is really just creating a template for wiring observers together on subscription.
+
+https://medium.com/@benlesh/learning-observable-by-building-observable-d5da57405d87#bf94
 
 # Rxjs in Angular
 
@@ -143,6 +247,19 @@ and they solve the problem of allowing modification of client side transient dat
 https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367
 
 
+The essential concepts in RxJS which solve async event management are:
+
+#  essential concepts in RxJS 
+
+```
+Observable: represents the idea of an invokable collection of future values or events.
+Observer: is a collection of callbacks that knows how to listen to values delivered by the Observable.
+Subscription: represents the execution of an Observable, is primarily useful for cancelling the execution.
+Operators: are pure functions that enable a functional programming style of dealing with collections with operations like map, filter, concat, flatMap, etc.
+Subject: is the equivalent to an EventEmitter, and the only way of multicasting a value or event to multiple Observers.
+Schedulers: are centralized dispatchers to control concurrency, allowing us to coordinate when computation happens on e.g. setTimeout or requestAnimationFrame or others.
+```
+
 # Reference
 
 [The introduction to Reactive Programming you've been missing](https://gist.github.com/staltz/868e7e9bc2a7b8c1f754)
@@ -154,3 +271,6 @@ https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367
 [RxJS — Six Operators That you Must Know](https://netbasal.com/rxjs-six-operators-that-you-must-know-5ed3b6e238a0)
 
 - operatorの例はとてもわかりやすかった
+
+
+http://reactivex.io/rxjs/manual/overview.html#pull-versus-push
