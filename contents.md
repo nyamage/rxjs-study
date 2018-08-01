@@ -23,54 +23,119 @@ https://codepen.io/anon/pen/VBzKWq
 
 ## What's Reactive Extension?
 
-- **非同期イベント(ストリーム)**処理のためのライブラリ
+- **ストリーム**(非同期イベント)処理のためのライブラリ
 
 ## Whrere does RXEX come from?
 
-- C#上のライブラリとして開発され、現在は[様々な言語](http://reactivex.io/languages.html#languages)で利用できる
+- C#のライブラリとして開発され、現在は[様々な言語](http://reactivex.io/languages.html#languages)で利用できる
 
 ## Usage in Angular2
 - EventEmitter
 - HTTP module 
 - The Router and Forms modules
+  
 https://angular.io/guide/observables-in-angular
 
 ## What does rxjs provide?
 
 Observable
-- 非同期なデータのコレクションを表現するオブジェクト
-- RXJSで使われるコアの型
+- ストリームを表現するオブジェクト
+- RXJSにおいてコアとなる型
+- subscribe時に実行される関数を保持しているだけ
   
 Observer
 - Observableをlistenするcallback関数(を保持するオブジェクト)
 
 Operator
-- 非同期イベントをコレクションのように扱える(map, filter, concat, reduce)
+- ストリームをコレクションのように扱える(map, filter, concat, reduce)
 
 and more...  https://rxjs-dev.firebaseapp.com/guide/overview
 
-# Observble使用例
+# Sample code with Observble
 
-例1) Observableはsubscribeしないと実行されない
+[1] Create observable object and subscribe it
 https://codepen.io/anon/pen/yqprYw?editors=0012
 
-例2) Observerはnext, error, completeのコールバックを持つオブジェクト
+* subscribeがtriggerしobservableの関数を実行する
+* subscribeした回数だけobservableの関数が実行される
+  
+[2] Observer can have three callback functions(next, error and complete).
 https://codepen.io/anon/pen/VBzKWq?editors=0012
 
-例3) ObservableからObservableを作る
+* observableから新しい値が届くたびにnextが呼ばれる
+* completeまたはerrorが呼ばれると、それ以降observableからnextが呼ばれることはない
+
+[3] create new stream from stream
 https://codepen.io/anon/pen/LBevNZ?editors=0012
 
-- httpの例
+# What's Observble
 
-# Observbleのもう少し深い説明
-- ストリーム
-- 非同期・多値, function, iterator, promiseとの比較
-- marble diagram
+Observable represents stream and a stream is just a list expressed over time.
 
-# Observableを使う上で必要となる知識
+## Comparision with promise and function, iterator
+
+||Single|Multiple|
+|:-:|:-:|:-:|
+|Pull|Function|Iterator|
+|Push|Promise|Observable|
+
+- 関数は１つの値を返す (同期)
+- generatorはゼロ又は複数(無限個の可能性もある)の値を返す (同期)
+- promiseの値は１つの値を返す (非同期)
+- observableはゼロ又は複数(無限個の可能性もある)の値を返す (同期 or 非同期)
+
+# Basic knowldge to use observable
+
+## Marble diagram
+
+- Marble diagramはストリームを表現するために使用される
+- Operatorがどう動くかを理解する際やデバッグの際に有用
+
+### Marble diagram sample
+
+３つデータを生成し、完了したストリーム
+![Emit data and complete](https://cdn-images-1.medium.com/max/1600/1*b-7_jU--CKfTkZ3hL66U6Q.png)
+
+３つデータを生成し、エラーになったストリーム
+![Emit data and error](https://cdn-images-1.medium.com/max/1600/1*DxXNdInXrcKT0Jg3WdGafQ.png)
+
+ストリームからfilter operatorを通して別のストリームを生成するケース
+![filter](https://cdn-images-1.medium.com/max/2000/1*t7F6N5eo7IQiq44VkjQMQQ.png)
+
+https://medium.com/@jshvarts/read-marble-diagrams-like-a-pro-3d72934d3ef5
 
 ## Operator
-- 代表的なOperatorの例
+
+ストリームをコレクションのように扱える(map, filter, concat, reduce)便利関数
+
+### map
+![map](https://cdn-images-1.medium.com/max/1600/1*LNmVKOum63rRnln1fGM7dA.png)
+
+### distinctUntilChanged
+
+![distinctUntilChanged](https://cdn-images-1.medium.com/max/2000/1*4NeoXvtUntbo9uCcFpIZpg.png)
+
+### combineLatest
+
+![combineLatest](https://cdn-images-1.medium.com/max/2000/1*a41bu3YdfJSCcRub5oWplA.png)
+
+図は
+https://medium.com/@jshvarts/read-marble-diagrams-like-a-pro-3d72934d3ef5 から
+
+### mergeMap(flatMap)
+
+observableの値をtriggerにストリームを作る(メタストリーム)例
+![map](https://camo.githubusercontent.com/2a8a9cc75acd13443f588fd7f386bd7a6dcb271a/687474703a2f2f692e696d6775722e636f6d2f48486e6d6c61632e706e67)
+
+mergeMapを利用するとメタストリームの値をOutputのストリームに出力することができる
+![mergeMap](https://cdn-images-1.medium.com/max/2000/1*HnjrvlaOGvVRmSs1uSUiqA.png)
+
+### concatMap
+
+mergeMapと似てるが違う点は前のメタストリームの完了を待つかどうか
+concatMapはメタストリームが完了してから次のメタストリームの値を出力する
+
+![concatMap](https://cdn-images-1.medium.com/max/2000/1*0O1r-YUeJ3mncOnrZayV6Q.png)
 
 ## Error Handling
 - catch, catchError, retry, retryWhen
@@ -84,3 +149,15 @@ https://codepen.io/anon/pen/LBevNZ?editors=0012
 - Rxjsを使ってる場合のDebug手段として何があるか?
 
 # Reference
+
+Reactive Extension公式
+http://reactivex.io/
+
+Angular公式
+https://angular.io/
+
+Codepen
+https://codepen.io/
+
+Understanding Marble Diagrams for Reactive Streams
+https://medium.com/@jshvarts/read-marble-diagrams-like-a-pro-3d72934d3ef5 
