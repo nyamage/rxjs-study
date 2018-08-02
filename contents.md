@@ -150,14 +150,10 @@ concatMapはメタストリームが完了してから次のメタストリー
 
 # Reference
 
-Reactive Extension公式
-http://reactivex.io/
+[Reactive Extension公式](http://reactivex.io/)
 
-Angular公式
-https://angular.io/
+[Angular公式](https://angular.io/)
 
-Codepen
-https://codepen.io/
+[Codepen](https://codepen.io/)
 
-Understanding Marble Diagrams for Reactive Streams
-https://medium.com/@jshvarts/read-marble-diagrams-like-a-pro-3d72934d3ef5 
+[Understanding Marble Diagrams for Reactive Streams](https://medium.com/@jshvarts/read-marble-diagrams-like-a-pro-3d72934d3ef5 )
