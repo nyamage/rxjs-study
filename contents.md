@@ -138,8 +138,40 @@ concatMapはメタストリームが完了してから次のメタストリー
 ![concatMap](https://cdn-images-1.medium.com/max/2000/1*0O1r-YUeJ3mncOnrZayV6Q.png)
 
 ## Error Handling
+
+RXJSではエラーが発生した場合はobserverのerrorコールバックが呼ばれsubscriptionが自動的に解除される.
+
+observable側でエラー処理を定義する場合は以下のoperatorが利用できる.
+- catch
+- catchError
+- retry
+- retryWhen
+
+### catch
+
+エラーをcatchして代替のストリーム(observable)を返す場合に使用する.
+catch時に可能な処理は以下
+- rethrow (errorになる)
+- 代替のobservableを返す
+    - エラー時の値を返す
+    - Rx.Observable.empty()を返してcompleteさせる
+    - Rx.Observable.never()を返してhangさせる
+- 
+https://codepen.io/anon/pen/EpErgy?editors=0012
+
+### catchError
+
+### retry
+
+### retryWhen
+
+
+
 - catch, catchError, retry, retryWhen
   
+
+https://alligator.io/rxjs/simple-error-handling/
+
 ## Hot vs Cold Observables
 - Hot observableの例
 - Cold observableの例
