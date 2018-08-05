@@ -40,11 +40,13 @@ https://angular.io/guide/observables-in-angular
 
 Observable
 - ストリームを表現するオブジェクト
-- RXJSにおいてコアとなる型
-- subscribe時に実行される関数を保持しているだけ
-  
+- subscribeメソッドによりobsearvableが生成する値を受け取るcallbackを設定することができる
+- subscribe時に実行される関数を保持している
+
 Observer
 - Observableをlistenするcallback関数(を保持するオブジェクト)
+- callbackはnext, error, completeの3種類
+- observableが値を生成した場合はnext, 例外が発生した場合はerror, ストリームが終了した場合はcompleteが呼ばれる
 
 Operator
 - ストリームをコレクションのように扱える(map, filter, concat, reduce)
@@ -53,26 +55,24 @@ and more...  https://rxjs-dev.firebaseapp.com/guide/overview
 
 # Sample code with Observble
 
-[1] Create observable object and subscribe it
-https://codepen.io/anon/pen/yqprYw?editors=0012
+[Create observable object and subscribe it](https://codepen.io/anon/pen/yqprYw)
 
 * subscribeがtriggerしobservableの関数を実行する
 * subscribeした回数だけobservableの関数が実行される
   
-[2] Observer can have three callback functions(next, error and complete).
-https://codepen.io/anon/pen/VBzKWq?editors=0012
+[Observer can have three callback functions(next, error and complete)](https://codepen.io/anon/pen/VBzKWq)
 
 * observableから新しい値が届くたびにnextが呼ばれる
 * completeまたはerrorが呼ばれると、それ以降observableからnextが呼ばれることはない
 
-[3] create new stream from stream
-https://codepen.io/anon/pen/LBevNZ?editors=0012
+[create another stream from stream](https://codepen.io/anon/pen/LBevNZ)
+- operatorを組み合わせることでstreamから別のstreamを生成できる
 
 # What's Observble
 
 Observable represents stream and a stream is just a list expressed over time.
 
-## Comparision with promise and function, iterator
+## Comparision with promise, function and iterator
 
 ||Single|Multiple|
 |:-:|:-:|:-:|
@@ -81,7 +81,7 @@ Observable represents stream and a stream is just a list expressed over time.
 
 - 関数は１つの値を返す (同期)
 - generatorはゼロ又は複数(無限個の可能性もある)の値を返す (同期)
-- promiseの値は１つの値を返す (非同期)
+- promiseは１つの値を返す (非同期)
 - observableはゼロ又は複数(無限個の可能性もある)の値を返す (同期 or 非同期)
 
 # Basic knowldge to use observable
@@ -91,7 +91,8 @@ Observable represents stream and a stream is just a list expressed over time.
 - Marble diagramはストリームを表現するために使用される
 - Operatorがどう動くかを理解する際やデバッグの際に有用
 
-### Marble diagram sample
+*図は
+https://medium.com/@jshvarts/read-marble-diagrams-like-a-pro-3d72934d3ef5 から
 
 ３つデータを生成し、完了したストリーム
 ![Emit data and complete](https://cdn-images-1.medium.com/max/1600/1*b-7_jU--CKfTkZ3hL66U6Q.png)
@@ -108,6 +109,9 @@ https://medium.com/@jshvarts/read-marble-diagrams-like-a-pro-3d72934d3ef5
 
 ストリームをコレクションのように扱える(map, filter, concat, reduce)便利関数
 
+*図は
+https://medium.com/@jshvarts/read-marble-diagrams-like-a-pro-3d72934d3ef5 から
+
 ### map
 ![map](https://cdn-images-1.medium.com/max/1600/1*LNmVKOum63rRnln1fGM7dA.png)
 
@@ -118,9 +122,6 @@ https://medium.com/@jshvarts/read-marble-diagrams-like-a-pro-3d72934d3ef5
 ### combineLatest
 
 ![combineLatest](https://cdn-images-1.medium.com/max/2000/1*a41bu3YdfJSCcRub5oWplA.png)
-
-図は
-https://medium.com/@jshvarts/read-marble-diagrams-like-a-pro-3d72934d3ef5 から
 
 ### mergeMap(flatMap)
 
@@ -139,46 +140,74 @@ concatMapはメタストリームが完了してから次のメタストリー
 
 ## Error Handling
 
-RXJSではエラーが発生した場合はobserverのerrorコールバックが呼ばれsubscriptionが自動的に解除される.
+エラーが発生した場合はobserverのerrorコールバックが呼ばれsubscriptionが自動的に解除される.
 
-observable側でエラー処理を定義する場合は以下のoperatorが利用できる.
+Observable側でエラー処理を定義する場合は以下のoperatorが利用できる.
 - catch
 - catchError
 - retry
 - retryWhen
 
-### catch
+### catch / catchError
 
 エラーをcatchして代替のストリーム(observable)を返す場合に使用する.
-catch時に可能な処理は以下
-- rethrow (errorになる)
+catch時に可能な処理は以下.
+
+- Errorをrethrowする(observerのerrorが呼ばれる)
 - 代替のobservableを返す
-    - エラー時の値を返す
+    - エラー時の値を返して処理を継続させる
     - Rx.Observable.empty()を返してcompleteさせる
     - Rx.Observable.never()を返してhangさせる
-- 
-https://codepen.io/anon/pen/EpErgy?editors=0012
+  
+https://codepen.io/anon/pen/EpErgy
 
-### catchError
+* catchErrorはpipe operatorの時に使う??
+
+### finally
+
+error又はcomplete状態になるときに必ず呼ばれる.
+**Observerのerror callbackの後に呼ばれる**
+https://codepen.io/anon/pen/GBdPZo
+
 
 ### retry
 
+引数で指定した回数分即時retryしてくれる.
+https://codepen.io/anon/pen/mjLare
+
+retryとcatchを組み合わせて、retryしても失敗した場合にエラー処理の実行をすることもできる.
+
 ### retryWhen
 
-
-
-- catch, catchError, retry, retryWhen
+一定期間retry間隔を遅らせる場合に使える. 
+回数を制限する場合はtakeを使うっぽい
+https://codepen.io/anon/pen/oMdJYK?editors=0012
   
 
 https://alligator.io/rxjs/simple-error-handling/
 
 ## Hot vs Cold Observables
-- Hot observableの例
-- Cold observableの例
-- ハマるケース
+
+Observableはストリームの生成のタイミングによりHot observableとCold observableに分類される.
+
+[Cold observable](https://codepen.io/anon/pen/JBBGLx)
+- subscribeのタイミングでストリームが生成され、subscribe毎に個別のストリームを持つ
+
+[Hot observable](https://codepen.io/anon/pen/WKKrKO)
+- subscribeの前から存在するストリーム(mouse move eventなど)から値をemitする.
+
+[share operatorを利用](https://codepen.io/anon/pen/djjGBP)してCold observableを複数のsubscriberで共有する
+- Cold observableをsubscribeしたタイミングでストリームが生成し、生成したストリームを他のsubscriberで共有可能
+
+[shareReplayを使う](https://codepen.io/anon/pen/KBBVOo)
+- share operatorだと最初のsubscribeのタイミングでemitされた値は他のsubscriberと共有できない(他のsubscriberがまだsubscribeしていないタイミングなので).
+- shareReplayを使うことで直近でemitされた値をsubscribe時に流すことが可能
   
 ## How to Debug
-- Rxjsを使ってる場合のDebug手段として何があるか?
+- do (or tap) operator を使ってconsole.logに出していく
+- Dependency graphやMarble diagramを書いて整理する
+
+https://staltz.com/how-to-debug-rxjs-code.html
 
 # Reference
 
@@ -189,3 +218,9 @@ https://alligator.io/rxjs/simple-error-handling/
 [Codepen](https://codepen.io/)
 
 [Understanding Marble Diagrams for Reactive Streams](https://medium.com/@jshvarts/read-marble-diagrams-like-a-pro-3d72934d3ef5 )
+
+[COLD VS HOT OBSERVABLES - thoughtram](https://blog.thoughtram.io/angular/2016/06/16/cold-vs-hot-observables.htm)
+
+[Cold vs. Hot Observables](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/gettingstarted/creating.md#cold-vs-hot-observables)
+
+[Rx Visualizer](https://rxviz.com/)
