@@ -9,7 +9,7 @@
     - [What does rxjs provide?](#what-does-rxjs-provide)
     - [Sample code with Observble](#sample-code-with-observble)
 - [Basic knowldge to use observable](#basic-knowldge-to-use-observable)
-    - [Marble diagram](#%08marble-diagram%08)
+    - [Marble diagram](#marble-diagram)
     - [Operator](#operator)
         - [map](#map)
         - [distinctUntilChanged](#distinctuntilchanged)
@@ -24,7 +24,7 @@
     - [Hot vs Cold Observables](#hot-vs-cold-observables)
     - [How to Debug](#how-to-debug)
 - [Appendix](#appendix)
-    - [Comparision with promise, function and iterator](#comparision-with-promise%08-function-and-iterator)
+    - [Comparision with promise, function and iterator](#comparision-with-promise-function-and-iterator)
 - [Reference](#reference)
 
 # はじめに
@@ -53,19 +53,19 @@ https://codepen.io/anon/pen/VBzKWq
 ## What's Reactive Extension?
 
 - **ストリーム**(非同期イベント)処理のためのライブラリ
-- C#のライブラリとして開発され、現在は[様々な言語](http://reactivex.io/languages.html#languages)で利用できる(JS版はRXJSと呼ばれる)
+- C#のライブラリとして開発され、現在は[様々な言語](http://reactivex.io/languages.html#languages)で利用できる(JS版はRXJSと呼ばれる)
 - Angular2のライブラリの[コアな部分で使用](https://angular.io/guide/observables-in-angular)されている (EventEmitter, HTTP module, Router and Forms modules)
   
 ## What does rxjs provide?
 
 Observable
-- ストリームを表現するオブジェクト
+- ストリームを表現するオブジェクト
 - subscribeメソッドによりobsearvableが生成する値を受け取るcallbackを設定することができる
 - subscribe時に実行される関数を保持している
 
-Observer
+Observer
 - Observableをlistenするcallback関数(next, error, completeの3種類)を定義したオブジェクト
-- Observableが値を生成した場合はnext, 例外が発生した場合はerror, ストリームが終了した場合はcompleteが呼ばれる
+- Observableが値を生成した場合はnext, 例外が発生した場合はerror, ストリームが終了した場合はcompleteが呼ばれる
 
 Operator
 - ストリームをコレクションのように扱う関数セット(map, filter, concat, reduce...etc)
@@ -89,28 +89,28 @@ and more...  https://rxjs-dev.firebaseapp.com/guide/overview
 
 # Basic knowldge to use observable
 
-## Marble diagram
+## Marble diagram
 
-- Marble diagramはストリームを表現するために使用される
+- Marble diagramはストリームを表現するために使用される
 - Operatorがどう動くかを理解する際やデバッグの際に有用
 
 *図は
 https://medium.com/@jshvarts/read-marble-diagrams-like-a-pro-3d72934d3ef5 から
 
-３つデータを生成し、完了したストリーム
+３つデータを生成し、完了したストリーム
 ![Emit data and complete](https://cdn-images-1.medium.com/max/1600/1*b-7_jU--CKfTkZ3hL66U6Q.png)
 
-３つデータを生成し、エラーになったストリーム
+３つデータを生成し、エラーになったストリーム
 ![Emit data and error](https://cdn-images-1.medium.com/max/1600/1*DxXNdInXrcKT0Jg3WdGafQ.png)
 
-ストリームからfilter operatorを通して別のストリームを生成するケース
+ストリームからfilter operatorを通して別のストリームを生成するケース
 ![filter](https://cdn-images-1.medium.com/max/2000/1*t7F6N5eo7IQiq44VkjQMQQ.png)
 
 https://medium.com/@jshvarts/read-marble-diagrams-like-a-pro-3d72934d3ef5
 
 ## Operator
 
-ストリームをコレクションのように扱える(map, filter, concat, reduce)便利関数
+ストリームをコレクションのように扱える(map, filter, concat, reduce)便利関数
 
 *図は
 https://medium.com/@jshvarts/read-marble-diagrams-like-a-pro-3d72934d3ef5 から
@@ -136,8 +136,8 @@ mergeMapを利用するとメタストリームの値をOutputのストリーム
 
 ### concatMap
 
-mergeMapと似てるが違う点は前のメタストリームの完了を待つかどうか
-concatMapはメタストリームが完了してから次のメタストリームの値を出力する
+mergeMapと似てるが違う点は前のメタストリームの完了を待つかどうか
+concatMapはメタストリームが完了してから次のメタストリームの値を出力する
 
 ![concatMap](https://cdn-images-1.medium.com/max/2000/1*0O1r-YUeJ3mncOnrZayV6Q.png)
 
@@ -164,12 +164,12 @@ catch時に可能な処理は以下.
   
 https://codepen.io/anon/pen/EpErgy
 
-* catchErrorはpipe operatorの時に使う??
+* catchErrorはpipe operatorの時に使う??
 
 ### finally
 
 error又はcomplete状態になるときに必ず呼ばれる.
-**Observerのerror callbackの後に呼ばれる**
+**Observerのerror callbackの後に呼ばれる**
 https://codepen.io/anon/pen/GBdPZo
 
 
@@ -204,7 +204,7 @@ Observableはストリームの生成のタイミングによりHot observable�
 
 [shareReplayを使う](https://codepen.io/anon/pen/KBBVOo)
 - share operatorだと最初のsubscribeのタイミングでemitされた値は他のsubscriberと共有できない(他のsubscriberがまだsubscribeしていないタイミングなので).
-- shareReplayを使うことで直近でemitされた値をsubscribe時に流すことが可能
+- shareReplayを使うことで直近でemitされた値をsubscribe時に流すことが可能
   
 ## How to Debug
 - do (or tap) operator を使ってconsole.logに出していく
@@ -214,7 +214,7 @@ https://staltz.com/how-to-debug-rxjs-code.html
 
 # Appendix
 
-## Comparision with promise, function and iterator
+## Comparision with promise, function and iterator
 
 ||Single|Multiple|
 |:-:|:-:|:-:|
