@@ -1,3 +1,32 @@
+- [はじめに](#%E3%81%AF%E3%81%98%E3%82%81%E3%81%AB)
+    - [目的](#%E7%9B%AE%E7%9A%84)
+    - [対象](#%E5%AF%BE%E8%B1%A1)
+    - [ゴール](#%E3%82%B4%E3%83%BC%E3%83%AB)
+    - [話さないこと](#%E8%A9%B1%E3%81%95%E3%81%AA%E3%81%84%E3%81%93%E3%81%A8)
+    - [方針](#%E6%96%B9%E9%87%9D)
+- [Overview](#overview)
+    - [What's Reactive Extension?](#whats-reactive-extension)
+    - [What does rxjs provide?](#what-does-rxjs-provide)
+    - [Sample code with Observble](#sample-code-with-observble)
+- [Basic knowldge to use observable](#basic-knowldge-to-use-observable)
+    - [Marble diagram](#%08marble-diagram%08)
+    - [Operator](#operator)
+        - [map](#map)
+        - [distinctUntilChanged](#distinctuntilchanged)
+        - [combineLatest](#combinelatest)
+        - [mergeMap(flatMap)](#mergemapflatmap)
+        - [concatMap](#concatmap)
+    - [Error Handling](#error-handling)
+        - [catch / catchError](#catch--catcherror)
+        - [finally](#finally)
+        - [retry](#retry)
+        - [retryWhen](#retrywhen)
+    - [Hot vs Cold Observables](#hot-vs-cold-observables)
+    - [How to Debug](#how-to-debug)
+- [Appendix](#appendix)
+    - [Comparision with promise, function and iterator](#comparision-with-promise%08-function-and-iterator)
+- [Reference](#reference)
+
 # はじめに
 
 ## 目的
@@ -21,21 +50,12 @@ https://codepen.io/anon/pen/VBzKWq
 
 # Overview
 
-## What's Reactive Extension?
+## What's Reactive Extension?
 
 - **ストリーム**(非同期イベント)処理のためのライブラリ
-
-## Whrere does RXEX come from?
-
-- C#のライブラリとして開発され、現在は[様々な言語](http://reactivex.io/languages.html#languages)で利用できる
-
-## Usage in Angular2
-- EventEmitter
-- HTTP module 
-- The Router and Forms modules
+- C#のライブラリとして開発され、現在は[様々な言語](http://reactivex.io/languages.html#languages)で利用できる(JS版はRXJSと呼ばれる)
+- Angular2のライブラリの[コアな部分で使用](https://angular.io/guide/observables-in-angular)されている (EventEmitter, HTTP module, Router and Forms modules)
   
-https://angular.io/guide/observables-in-angular
-
 ## What does rxjs provide?
 
 Observable
@@ -44,16 +64,15 @@ Observable
 - subscribe時に実行される関数を保持している
 
 Observer
-- Observableをlistenするcallback関数(を保持するオブジェクト)
-- callbackはnext, error, completeの3種類
-- observableが値を生成した場合はnext, 例外が発生した場合はerror, ストリームが終了した場合はcompleteが呼ばれる
+- Observableをlistenするcallback関数(next, error, completeの3種類)を定義したオブジェクト
+- Observableが値を生成した場合はnext, 例外が発生した場合はerror, ストリームが終了した場合はcompleteが呼ばれる
 
 Operator
-- ストリームをコレクションのように扱える(map, filter, concat, reduce)
+- ストリームをコレクションのように扱う関数セット(map, filter, concat, reduce...etc)
 
 and more...  https://rxjs-dev.firebaseapp.com/guide/overview
 
-# Sample code with Observble
+## Sample code with Observble
 
 [Create observable object and subscribe it](https://codepen.io/anon/pen/yqprYw)
 
@@ -67,22 +86,6 @@ and more...  https://rxjs-dev.firebaseapp.com/guide/overview
 
 [create another stream from stream](https://codepen.io/anon/pen/LBevNZ)
 - operatorを組み合わせることでstreamから別のstreamを生成できる
-
-# What's Observble
-
-Observable represents stream and a stream is just a list expressed over time.
-
-## Comparision with promise, function and iterator
-
-||Single|Multiple|
-|:-:|:-:|:-:|
-|Pull|Function|Iterator|
-|Push|Promise|Observable|
-
-- 関数は１つの値を返す (同期)
-- generatorはゼロ又は複数(無限個の可能性もある)の値を返す (同期)
-- promiseは１つの値を返す (非同期)
-- observableはゼロ又は複数(無限個の可能性もある)の値を返す (同期 or 非同期)
 
 # Basic knowldge to use observable
 
@@ -208,6 +211,20 @@ Observableはストリームの生成のタイミングによりHot observable�
 - Dependency graphやMarble diagramを書いて整理する
 
 https://staltz.com/how-to-debug-rxjs-code.html
+
+# Appendix
+
+## Comparision with promise, function and iterator
+
+||Single|Multiple|
+|:-:|:-:|:-:|
+|Pull|Function|Iterator|
+|Push|Promise|Observable|
+
+- 関数は１つの値を返す (同期)
+- generatorはゼロ又は複数(無限個の可能性もある)の値を返す (同期)
+- promiseは１つの値を返す (非同期)
+- observableはゼロ又は複数(無限個の可能性もある)の値を返す (同期 or 非同期)
 
 # Reference
 
