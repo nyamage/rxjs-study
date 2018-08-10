@@ -1,9 +1,7 @@
-- [はじめに](#%E3%81%AF%E3%81%98%E3%82%81%E3%81%AB)
-    - [目的](#%E7%9B%AE%E7%9A%84)
-    - [対象](#%E5%AF%BE%E8%B1%A1)
-    - [ゴール](#%E3%82%B4%E3%83%BC%E3%83%AB)
-    - [話さないこと](#%E8%A9%B1%E3%81%95%E3%81%AA%E3%81%84%E3%81%93%E3%81%A8)
-    - [方針](#%E6%96%B9%E9%87%9D)
+- [Introduction](#introduction)
+    - [Purpose](#purpose)
+    - [Target](#target)
+    - [Goal](#goal)
 - [Overview](#overview)
     - [What's Reactive Extension?](#whats-reactive-extension)
     - [What does rxjs provide?](#what-does-rxjs-provide)
@@ -27,26 +25,21 @@
     - [Comparision with promise, function and iterator](#comparision-with-promise-function-and-iterator)
 - [Reference](#reference)
 
-# はじめに
+# Introduction
 
-## 目的
+## Purpose
 - Angularでは所々でRXJSが使われているが、RXJS内で使われる概念が独特なので、ある程度知らないとコードの開発・保守が辛い
 - RXJSでハマる人をなるべく減らすため
 
-## 対象
+## Target
 - AngularでRXJSをなんとなく使ってる人
 
-## ゴール
+## Goal
 - Angularを使う上で最低限必要(そう)なRXJSの知識が身についている
 
-## 話さないこと
-- RPとかFRPとかについてはあまりあまりふれない
-
-## 方針
-
-オンラインエディタを使っていじれるサンプルを使用する
-
-https://codepen.io/anon/pen/VBzKWq
+ 
+(オンラインエディタで動かしながら学ぶ
+https://codepen.io/anon/pen/VBzKWq )
 
 # Overview
 
